@@ -1,0 +1,9 @@
+mkdir my-python-ci
+cd my-python-ci
+git init
+echo "requests" > requirements.txt
+echo "print('Hello from CI!')" > test.py
+git add .
+git commit -m "init"
+git remote add origin https://github.com/Rani-Sivakumar/my-python-ci.git
+git push -u origin main
