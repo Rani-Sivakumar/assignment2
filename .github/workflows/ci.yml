@@ -1,0 +1,40 @@
+name: Python CI with cache
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        id: cache-a9e6e73
+        with:
+          path: ~/.cache/pip
+          key: cache-a9e6e73
+
+      - name: prime-cache-a9e6e73
+        run: |
+          if [[ "${{ steps.cache-a9e6e73.outputs.cache-hit }}" == "true" ]]; then
+            echo "Cache HIT for key 'cache-a9e6e73'"
+          else
+            echo "Cache MISS for key 'cache-a9e6e73'"
+          fi
+
+      - name: Install dependencies
+        if: steps.cache-a9e6e73.outputs.cache-hit != 'true'
+        run: pip install -r requirements.txt
+
+      - name: Run Python script
+        run: python test.py
